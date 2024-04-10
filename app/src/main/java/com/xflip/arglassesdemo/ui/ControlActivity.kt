@@ -1,21 +1,12 @@
 package com.xflip.arglassesdemo.ui
 
-import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import android.widget.SpinnerAdapter
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bhm.ble.utils.BleLogger
 import com.xflip.arglassesdemo.App
-import com.xflip.arglassesdemo.R
 import com.xflip.arglassesdemo.base.BaseActivity
 import com.xflip.arglassesdemo.ble.BleCommand
 import com.xflip.arglassesdemo.databinding.ActivityControlBinding

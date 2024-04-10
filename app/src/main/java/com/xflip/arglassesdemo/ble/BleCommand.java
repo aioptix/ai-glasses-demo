@@ -134,22 +134,6 @@ public class BleCommand {
         return getFinalCommand(getCurrentSerialNumber(), needCrc16Command);
     }
 
-    /**
-     * Notification
-     * @param title           title
-     * @param content         content
-     * @param belongSoftware  Software
-     * @param timestamp       Timestamp of push message (seconds)
-     * @return                Notification command
-     */
-    public static ArrayList<byte[]>  setNotifyMessage(String title,
-                                                      String content,
-                                                      int belongSoftware,
-                                                      long timestamp) {
-        return setNotifyMessage(title, content, belongSoftware, String.valueOf(timestamp));
-    }
-
-
     private static final int MAX_PAYLOAD_LENGTH = 168;
 
     public static final int NOTIFY_MESSAGE_STYLE_DEFAULT = 0;
@@ -162,14 +146,14 @@ public class BleCommand {
      * @param title           title
      * @param content         content
      * @param belongSoftware  Software
-     * @param timestamp       Timestamp of push message (seconds)
+     * @param customTimeFormat       Custom time format (2404071630) means 2024-04-07 16:30
      * @return                Notification command
      */
     public static ArrayList<byte[]>  setNotifyMessage(String title,
                                                       String content,
                                                       int belongSoftware,
-                                                      String timestamp) {
-        return setNotifyMessage(title, content, belongSoftware, timestamp, NOTIFY_MESSAGE_STYLE_DEFAULT);
+                                                      String customTimeFormat) {
+        return setNotifyMessage(title, content, belongSoftware, customTimeFormat, NOTIFY_MESSAGE_STYLE_DEFAULT);
     }
 
     /**
@@ -259,7 +243,7 @@ public class BleCommand {
      *                        {@link BleCommand#BELONG_SOFTWARE_QQ QQ notification}
      *                        {@link BleCommand#BELONG_SOFTWARE_DINGDING DingDing notification}
      *                        {@link BleCommand#BELONG_SOFTWARE_OTHER Other app}
-     * @param timestamp       Timestamp of push message (seconds)
+     * @param customTimeFormat       Custom time format (2404071630) means 2024-04-07 16:30
      * @param uiStyle         ui style。default is {@link BleCommand#NOTIFY_MESSAGE_STYLE_DEFAULT default style}
      *                        {@link BleCommand#NOTIFY_MESSAGE_STYLE_ONE Style one}
      *                        {@link BleCommand#NOTIFY_MESSAGE_STYLE_TWO Style two}
@@ -269,13 +253,13 @@ public class BleCommand {
     public static ArrayList<byte[]>  setNotifyMessage(String title,
                                                       String content,
                                                       int belongSoftware,
-                                                      String timestamp,
+                                                      String customTimeFormat,
                                                       int uiStyle) {
 
         byte use = (byte) 0xD5;
         byte currentSerialNumber = getCurrentSerialNumber();
         ArrayList<byte[]> willSendByteList;
-        String keyValueData = "t:" + title + ";c:" + content + ";b:" + belongSoftware + ";m:" + timestamp + ";u:" + uiStyle;
+        String keyValueData = "t:" + title + ";c:" + content + ";b:" + belongSoftware + ";m:" + customTimeFormat + ";u:" + uiStyle;
         byte[] allWillSendPayload = keyValueData.getBytes(StandardCharsets.UTF_8);
         if (allWillSendPayload.length / MAX_PAYLOAD_LENGTH == 0) {
             // Only one data pack
@@ -300,7 +284,7 @@ public class BleCommand {
                     byte[] needCrc16Command = new byte[3+lastPayloadLength];
                     needCrc16Command[0] = use;
                     // Pack count
-                    needCrc16Command[1] = (byte) willSendListLength;;
+                    needCrc16Command[1] = (byte) willSendListLength;
                     // Which pack
                     needCrc16Command[2] = (byte) (i+1);
                     System.arraycopy(allWillSendPayload, (i * MAX_PAYLOAD_LENGTH), needCrc16Command, 3, lastPayloadLength);
@@ -309,7 +293,7 @@ public class BleCommand {
                     byte[] needCrc16Command = new byte[3+MAX_PAYLOAD_LENGTH];
                     needCrc16Command[0] = use;
                     // Pack count
-                    needCrc16Command[1] = (byte) willSendListLength;;
+                    needCrc16Command[1] = (byte) willSendListLength;
                     // Which pack
                     needCrc16Command[2] = (byte) (i+1);
                     System.arraycopy(allWillSendPayload, (i * MAX_PAYLOAD_LENGTH), needCrc16Command, 3, MAX_PAYLOAD_LENGTH);
@@ -582,18 +566,46 @@ public class BleCommand {
         return getFinalCommand(getCurrentSerialNumber(), needCrc16Command);
     }
 
+    public final static byte CONTROL_OPEN = 0x01;
+
+    public final static byte CONTROL_CLOSE = 0x00;
+
+    public final static byte FUNCTION_AI_RECORD_VOICE = 0x01;
+
+    public final static byte FUNCTION_AI_LOSE_CONNECTION = 0x02;
+
+    public final static byte FUNCTION_AI_QUESTION_DIALOG_SHOW = 0x03;
+
+    /**
+     * Control some functions of your glasses
+     * @param function function
+     *                 {@link BleCommand#FUNCTION_AI_RECORD_VOICE recording}
+     *                 {@link BleCommand#FUNCTION_AI_LOSE_CONNECTION lost connection to AI}
+     *                 {@link BleCommand#FUNCTION_AI_QUESTION_DIALOG_SHOW Whether to display the question dialog}
+     * @param control open or close
+     *                {@link BleCommand#CONTROL_OPEN Open the function}
+     *                {@link BleCommand#CONTROL_CLOSE Close the function}
+     * @return Control some functions of your glasses command
+     */
+    public static byte[] glassesControl(byte function, byte control) {
+        byte[] needCrc16Command = new byte[3];
+        needCrc16Command[0] = (byte) 0xDB;
+        needCrc16Command[1] = function;
+        needCrc16Command[2] = control;
+
+        return getFinalCommand(getCurrentSerialNumber(), needCrc16Command);
+    }
+
     /**
      * AI replies to the text content of the glasses
-     * @param question Question
      * @param replyContent Content of AI reply
      * @return AI replies to the text content of the glasses command
      */
-    public static ArrayList<byte[]> aiReply(String question, String replyContent) {
+    public static ArrayList<byte[]> aiReply(String replyContent) {
         byte use = (byte) 0xDC;
         byte currentSerialNumber = getCurrentSerialNumber();
         ArrayList<byte[]> willSendByteList;
-        String keyValueData = "q:" + question + ";c:" + replyContent;
-        byte[] allWillSendPayload = keyValueData.getBytes(StandardCharsets.UTF_8);
+        byte[] allWillSendPayload = replyContent.getBytes(StandardCharsets.UTF_8);
         if (allWillSendPayload.length / MAX_PAYLOAD_LENGTH == 0) {
             // Only one data pack
             willSendByteList = new ArrayList<>(1);
@@ -617,7 +629,7 @@ public class BleCommand {
                     byte[] needCrc16Command = new byte[3+lastPayloadLength];
                     needCrc16Command[0] = use;
                     // Pack count
-                    needCrc16Command[1] = (byte) willSendListLength;;
+                    needCrc16Command[1] = (byte) willSendListLength;
                     // Which pack
                     needCrc16Command[2] = (byte) (i+1);
                     System.arraycopy(allWillSendPayload, (i * MAX_PAYLOAD_LENGTH), needCrc16Command, 3, lastPayloadLength);
@@ -626,7 +638,60 @@ public class BleCommand {
                     byte[] needCrc16Command = new byte[3+MAX_PAYLOAD_LENGTH];
                     needCrc16Command[0] = use;
                     // Pack count
-                    needCrc16Command[1] = (byte) willSendListLength;;
+                    needCrc16Command[1] = (byte) willSendListLength;
+                    // Which pack
+                    needCrc16Command[2] = (byte) (i+1);
+                    System.arraycopy(allWillSendPayload, (i * MAX_PAYLOAD_LENGTH), needCrc16Command, 3, MAX_PAYLOAD_LENGTH);
+                    willSendByteList.add(getFinalCommand(currentSerialNumber, needCrc16Command));
+                }
+            }
+        }
+        return willSendByteList;
+    }
+
+    /**
+     * Questions for AI
+     * @param question Ask a question
+     * @return Questions to the text content of the glasses command
+     */
+    public static ArrayList<byte[]> aiQuestion(String question) {
+        byte use = (byte) 0xCD;
+        byte currentSerialNumber = getCurrentSerialNumber();
+        ArrayList<byte[]> willSendByteList;
+        byte[] allWillSendPayload = question.getBytes(StandardCharsets.UTF_8);
+        if (allWillSendPayload.length / MAX_PAYLOAD_LENGTH == 0) {
+            // Only one data pack
+            willSendByteList = new ArrayList<>(1);
+            int payloadLength = allWillSendPayload.length;
+            byte[] needCrc16Command = new byte[3+payloadLength];
+            needCrc16Command[0] = use;
+            // Pack count
+            needCrc16Command[1] = 0x01;
+            // Which pack
+            needCrc16Command[2] = 0x01;
+            System.arraycopy(allWillSendPayload, 0, needCrc16Command, 3, payloadLength);
+            willSendByteList.add(getFinalCommand(currentSerialNumber, needCrc16Command));
+        } else {
+            int willSendListLength = (allWillSendPayload.length / MAX_PAYLOAD_LENGTH) + 1;
+            willSendByteList = new ArrayList<>(willSendListLength);
+            // Assemble data
+            for (int i=0; i<willSendListLength; i++) {
+                if (i == willSendListLength-1) {
+                    // Last pack
+                    int lastPayloadLength = allWillSendPayload.length % MAX_PAYLOAD_LENGTH;
+                    byte[] needCrc16Command = new byte[3+lastPayloadLength];
+                    needCrc16Command[0] = use;
+                    // Pack count
+                    needCrc16Command[1] = (byte) willSendListLength;
+                    // Which pack
+                    needCrc16Command[2] = (byte) (i+1);
+                    System.arraycopy(allWillSendPayload, (i * MAX_PAYLOAD_LENGTH), needCrc16Command, 3, lastPayloadLength);
+                    willSendByteList.add(getFinalCommand(currentSerialNumber, needCrc16Command));
+                } else {
+                    byte[] needCrc16Command = new byte[3+MAX_PAYLOAD_LENGTH];
+                    needCrc16Command[0] = use;
+                    // Pack count
+                    needCrc16Command[1] = (byte) willSendListLength;
                     // Which pack
                     needCrc16Command[2] = (byte) (i+1);
                     System.arraycopy(allWillSendPayload, (i * MAX_PAYLOAD_LENGTH), needCrc16Command, 3, MAX_PAYLOAD_LENGTH);

@@ -29,6 +29,9 @@ class App: Application() {
 
 
     /*----------------------------- Bluetooth -------------------------------*/
+
+    var sBleDevice : BleDevice? = null
+
     fun initBle(refreshBleDevice: MutableStateFlow<RefreshBleDevice>) {
         BleManager.get().init(
             instance,
@@ -119,6 +122,14 @@ class App: Application() {
         bleDevice?.let { device ->
             BleManager.get().connect(device, false, connectCallback)
         }
+    }
+
+    fun setBleDevice(bleDevice: BleDevice?) {
+        sBleDevice = bleDevice
+    }
+
+    fun getBleDevice(): BleDevice? {
+        return sBleDevice
     }
 
 }

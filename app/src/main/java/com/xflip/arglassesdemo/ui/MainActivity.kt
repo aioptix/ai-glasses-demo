@@ -1,20 +1,14 @@
 package com.xflip.arglassesdemo.ui
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bhm.ble.device.BleDevice
-import com.xflip.arglassesdemo.App
 import com.xflip.arglassesdemo.R
 import com.xflip.arglassesdemo.adapter.DeviceListAdapter
 import com.xflip.arglassesdemo.base.BaseActivity
-import com.xflip.arglassesdemo.ble.BleCommand
 import com.xflip.arglassesdemo.databinding.ActivityMainBinding
 import com.xflip.arglassesdemo.entity.MessageEvent
 import com.xflip.arglassesdemo.utils.ViewUtil
@@ -105,8 +99,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     viewModel.connect(bleDevice)
                 }
             } else if (view.id == R.id.btnOperate) {
-                // Test todo enter operate page
-                if (bleDevice != null) App.instance.writeData(bleDevice, BleCommand.adjustVolume(10))
+                startActivity(Intent(this@MainActivity, ControlActivity::class.java))
             }
         }
 

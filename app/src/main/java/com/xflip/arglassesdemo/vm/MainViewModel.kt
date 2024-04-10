@@ -224,11 +224,13 @@ class MainViewModel(private val application: Application) : BaseViewModel(applic
             val message = MessageEvent()
             message.data = bleDevice
             EventBus.getDefault().post(message)
+            App.instance.setBleDevice(null)
         }
         onConnectSuccess { bleDevice, _ ->
             Toast.makeText(application, "connection succeeded(${bleDevice.deviceAddress})", Toast.LENGTH_SHORT).show()
             refreshMutableStateFlow.value = RefreshBleDevice(bleDevice, System.currentTimeMillis())
             App.instance.notify(bleDevice)
+            App.instance.setBleDevice(bleDevice)
         }
     }
 

@@ -1,3 +1,22 @@
 <resources>
-    <string name="app_name">ArGlassesDemo</string>
+    <string name="app_name">Ar Glasses Demo</string>
+    <string name="brightness">Brightness: </string>
+    <string name="volume">Volume: </string>
+    <string name="language">Language: </string>
+    <string name="set_screen_turn_off_time">Screen turn off time: </string>
+    <string name="_1_65535_sec">1~65535 sec</string>
+    <string name="submit_time">Submit time</string>
+    <string name="question">Question:</string>
+    <string name="submit_question">Submit Question</string>
+    <string name="ai_q_a"><![CDATA[AI Q&A]]></string>
+    <string name="ai_reply">AI Reply:</string>
+    <string name="submit_ai_reply">Submit AI Reply</string>
+    <string name="show_question_dialog">Show Question Dialog</string>
+    <string name="tip_you_can_simulate_the_questions_you_want_to_ask_and_the_ai_response_content_click_the_submit_button_to_display_on_the_glasses">Tip: You can simulate the questions you want to ask and the AI response content. Click the submit button to display on the glasses</string>
+    <string name="title">Title:</string>
+    <string name="content">Content:</string>
+    <string name="software">Software:</string>
+    <string name="style">Style:</string>
+    <string name="notify_glasses">Notify Glasses</string>
+    <string name="notification">Notification</string>
 </resources>

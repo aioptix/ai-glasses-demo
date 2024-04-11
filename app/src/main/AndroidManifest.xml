@@ -14,8 +14,17 @@
         android:theme="@style/Theme.ArGlassesDemo"
         tools:targetApi="31">
         <activity
+            android:name=".ui.AiQaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.MessageNotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.ControlActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

@@ -2,6 +2,7 @@ package com.xflip.arglassesdemo.vm
 
 import android.app.Application
 import android.content.Intent
+import android.icu.util.Calendar
 import android.provider.Settings
 import android.widget.Toast
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,7 @@ import com.xflip.arglassesdemo.App
 import com.xflip.arglassesdemo.LOCATION_PERMISSION
 import com.xflip.arglassesdemo.base.BaseActivity
 import com.xflip.arglassesdemo.base.BaseViewModel
+import com.xflip.arglassesdemo.ble.BleCommand
 import com.xflip.arglassesdemo.entity.MessageEvent
 import com.xflip.arglassesdemo.entity.RefreshBleDevice
 import kotlinx.coroutines.delay
@@ -231,7 +233,20 @@ class MainViewModel(private val application: Application) : BaseViewModel(applic
             refreshMutableStateFlow.value = RefreshBleDevice(bleDevice, System.currentTimeMillis())
             App.instance.notify(bleDevice)
             App.instance.setBleDevice(bleDevice)
+            // set current time
+            setCurrentTime(bleDevice)
         }
+    }
+
+    private fun setCurrentTime(bleDevice: BleDevice) {
+        val calendar = Calendar.getInstance()
+        App.instance.writeData(bleDevice,
+            BleCommand.setTime(calendar.get(Calendar.YEAR)-2000,
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND)))
     }
 
     fun disConnect(bleDevice: BleDevice?) {

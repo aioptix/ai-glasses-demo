@@ -14,7 +14,7 @@ public class BleCommand {
     public static final String NOTIFY_CHARACTERISTIC = "0000ffe1-0000-1000-8000-00805f9b34fb";
     public static final String WRITE_CHARACTERISTIC = "0000ffe2-0000-1000-8000-00805f9b34fb";
 
-    private static int CRC16_IBM(byte[] buffer) {
+    public static int CRC16_IBM(byte[] buffer) {
         int wCRCin = 0x0000;
         int wCPoly = 0xa001;
         int bitMax = 8;
@@ -378,21 +378,6 @@ public class BleCommand {
     }
 
     /**
-     * Set the display style of UI
-     * @param style display style
-     * @param uiId  ui ID
-     * @return et the display style of UI command
-     */
-    public static byte[] setUIStyle(byte style, byte uiId) {
-        byte[] needCrc16Command = new byte[3];
-        needCrc16Command[0] = (byte) 0xD8;
-        needCrc16Command[1] = style;
-        needCrc16Command[2] = uiId;
-
-        return getFinalCommand(getCurrentSerialNumber(), needCrc16Command);
-    }
-
-    /**
      * Get device information
      * @return Get device information command
      */
@@ -404,7 +389,7 @@ public class BleCommand {
     }
 
     /**
-     * Set up message notifications
+     * Set up message notifications (Use on IOS iphone)
      * @param skypeOpen       Is skype enabled
      * @param lineOpen        Is line enabled
      * @param phoneCallOpen   Is incoming call enabled
@@ -464,7 +449,7 @@ public class BleCommand {
     }
 
     /**
-     * Get message notification settings
+     * Get message notification settings (Use on IOS iphone)
      * @return Get message notification settings command
      */
     public static byte[] getMessageNotification() {
@@ -541,6 +526,26 @@ public class BleCommand {
     /**
      * Set data related to AI mode
      * @param addedOtherDevice Whether to add additional pickup equipment
+     * @param aiMode           Custom Mode
+     *                         {@link BleCommand#AI_READING_AND_WRITING_MODE Reading and Writing mode}
+     *                         {@link BleCommand#AI_DRIVING_MODE Driving mode}
+     *                         {@link BleCommand#AI_GAMING_MODE Gaming mode}
+     *                         {@link BleCommand#AI_TRANSLATION_MODE Translation mode}
+     *                         {@link BleCommand#AI_COOKING_MODE Cooking mode}
+     *                         {@link BleCommand#AI_MORSE_CODE_MODE Morse code mode}
+     *                         {@link BleCommand#AI_TEAM_MODE Team mode}
+     *                         {@link BleCommand#AI_YOGA_MODE Yoga mode}
+     *                         {@link BleCommand#AI_CHATGPT_MODE ChatGPT mode}
+     *                         {@link BleCommand#AI_PHONE_MODE Phone mode}
+     * @return                 Set data related to AI mode command
+     */
+    public static byte[] setAI(boolean addedOtherDevice, byte aiMode) {
+        return setAI(addedOtherDevice, (byte)0x00, aiMode);
+    }
+
+    /**
+     * Set data related to AI mode
+     * @param addedOtherDevice Whether to add additional pickup equipment
      * @param otherDeviceType  Other device types
      * @param aiMode           Custom Mode
      *                         {@link BleCommand#AI_READING_AND_WRITING_MODE Reading and Writing mode}
@@ -602,7 +607,7 @@ public class BleCommand {
      * @return AI replies to the text content of the glasses command
      */
     public static ArrayList<byte[]> aiReply(String replyContent) {
-        byte use = (byte) 0xDC;
+        byte use = (byte) 0xCD;
         byte currentSerialNumber = getCurrentSerialNumber();
         ArrayList<byte[]> willSendByteList;
         byte[] allWillSendPayload = replyContent.getBytes(StandardCharsets.UTF_8);
@@ -655,7 +660,7 @@ public class BleCommand {
      * @return Questions to the text content of the glasses command
      */
     public static ArrayList<byte[]> aiQuestion(String question) {
-        byte use = (byte) 0xCD;
+        byte use = (byte) 0xDC;
         byte currentSerialNumber = getCurrentSerialNumber();
         ArrayList<byte[]> willSendByteList;
         byte[] allWillSendPayload = question.getBytes(StandardCharsets.UTF_8);

@@ -12,8 +12,10 @@ import com.bhm.ble.device.BleDevice
 import com.bhm.ble.utils.BleLogger
 import com.bhm.ble.utils.BleUtil
 import com.xflip.arglassesdemo.ble.BleCommand
+import com.xflip.arglassesdemo.entity.MessageEvent
 import com.xflip.arglassesdemo.entity.RefreshBleDevice
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.greenrobot.eventbus.EventBus
 
 class App: Application() {
 
@@ -25,12 +27,13 @@ class App: Application() {
     companion object {
         lateinit var instance: App
             private set
+        const val NOTIFY_DATA = "notifyData"
     }
 
 
     /*----------------------------- Bluetooth -------------------------------*/
 
-    var sBleDevice : BleDevice? = null
+    private var sBleDevice : BleDevice? = null
 
     fun initBle(refreshBleDevice: MutableStateFlow<RefreshBleDevice>) {
         BleManager.get().init(
@@ -84,6 +87,10 @@ class App: Application() {
             onCharacteristicChanged {_, notifyUUID, data ->
                 // Data processing is in the IO thread,
                 // and the display UI needs to be switched to the main thread.
+                val message = MessageEvent()
+                message.data = data
+                message.msg = NOTIFY_DATA
+                EventBus.getDefault().post(message)
                 launchInMainThread {
                     BleLogger.d("Notify receive${notifyUUID}data：" + BleUtil.bytesToHex(data))
                 }

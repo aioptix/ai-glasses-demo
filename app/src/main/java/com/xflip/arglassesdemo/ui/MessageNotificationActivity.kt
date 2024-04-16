@@ -136,7 +136,7 @@ class MessageNotificationActivity : BaseActivity<MessageNotificationViewModel, A
     private fun getCurrentCustomTime():String {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)-2000
-        val month = getTwoDigitString(calendar.get(Calendar.MONTH))
+        val month = getTwoDigitString(calendar.get(Calendar.MONTH)+1)
         val day = getTwoDigitString(calendar.get(Calendar.DAY_OF_MONTH))
         val hour = getTwoDigitString(calendar.get(Calendar.HOUR_OF_DAY))
         val min = getTwoDigitString(calendar.get(Calendar.MINUTE))

@@ -240,13 +240,15 @@ class MainViewModel(private val application: Application) : BaseViewModel(applic
 
     private fun setCurrentTime(bleDevice: BleDevice) {
         val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val min = calendar.get(Calendar.MINUTE)
+        val sec = calendar.get(Calendar.SECOND)
+        BleLogger.d("set time: year:$year month:$month day:$day hour:$hour minute:$min second:$sec")
         App.instance.writeData(bleDevice,
-            BleCommand.setTime(calendar.get(Calendar.YEAR)-2000,
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND)))
+            BleCommand.setTime(year, month, day, hour, min, sec))
     }
 
     fun disConnect(bleDevice: BleDevice?) {

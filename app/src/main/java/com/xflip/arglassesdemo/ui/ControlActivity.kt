@@ -7,7 +7,6 @@ import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import com.bhm.ble.utils.BleLogger
-import com.bhm.ble.utils.BleUtil
 import com.xflip.arglassesdemo.App
 import com.xflip.arglassesdemo.base.BaseActivity
 import com.xflip.arglassesdemo.ble.BleCommand
@@ -15,7 +14,6 @@ import com.xflip.arglassesdemo.databinding.ActivityControlBinding
 import com.xflip.arglassesdemo.entity.MessageEvent
 import com.xflip.arglassesdemo.utils.ViewUtil
 import com.xflip.arglassesdemo.vm.ControlViewModel
-import java.nio.charset.Charset
 
 class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>() {
 
@@ -84,6 +82,12 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
                 return@setOnClickListener
             }
             startActivity(Intent(this@ControlActivity, MessageNotificationActivity::class.java))
+        }
+        viewBinding.btnNavigation.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            startActivity(Intent(this@ControlActivity, NavActivity::class.java))
         }
     }
 

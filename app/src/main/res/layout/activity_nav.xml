@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NavActivity">
+
+    <TextView
+        android:id="@+id/tvDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/direction"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etDirection"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/please_input_0_76"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDirection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvDirection" />
+
+    <TextView
+        android:id="@+id/tvTotalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/total_journey_time_minute"
+        app:layout_constraintStart_toStartOf="@+id/tvDirection"
+        app:layout_constraintTop_toBottomOf="@+id/tvDirection" />
+
+    <EditText
+        android:id="@+id/etTotalTime"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/please_input_time_minute"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTotalTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTotalTime"
+        android:autofillHints="@string/please_input_time_minute" />
+
+    <TextView
+        android:id="@+id/tvTotalDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_distance"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/tvTotalTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalTime" />
+
+    <EditText
+        android:id="@+id/etTotalDistance"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/please_input_distance"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTotalDistance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTotalDistance"
+        android:autofillHints="@string/please_input_distance" />
+
+    <TextView
+        android:id="@+id/tvRemainDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remaining_distance_meter"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/tvTotalDistance"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalDistance" />
+
+    <EditText
+        android:id="@+id/etRemainDistance"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/please_input_distance"
+        app:layout_constraintBottom_toBottomOf="@+id/tvRemainDistance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvRemainDistance"
+        android:autofillHints="@string/please_input_distance" />
+
+    <TextView
+        android:id="@+id/tvCurrentSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current_speed"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/tvRemainDistance"
+        app:layout_constraintTop_toBottomOf="@+id/tvRemainDistance" />
+
+    <EditText
+        android:id="@+id/etCurrentSpeed"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/please_input_speed"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCurrentSpeed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvCurrentSpeed"
+        android:autofillHints="@string/please_input_speed" />
+
+    <TextView
+        android:id="@+id/tvCurrentRoadSegment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remaining_distance_of_current_road_segment"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrentSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrentSpeed" />
+
+    <EditText
+        android:id="@+id/etCurrentRoadSegment"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/please_input"
+        android:hint="@string/please_input"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrentRoadSegment" />
+
+
+
+    <Button
+        android:id="@+id/btnSendCommand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_command"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvFirstRoadSegment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/first_road_segment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCurrentRoadSegment" />
+
+    <Spinner
+        android:id="@+id/spinnerFirstRoadSegment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstRoadSegment" />
+
+    <EditText
+        android:id="@+id/etFirstRoadSegment"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/please_input_distance"
+        android:hint="@string/please_input_distance"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerFirstRoadSegment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerFirstRoadSegment"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstRoadSegment" />
+
+    <TextView
+        android:id="@+id/tvSecondRoadSegment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/second_road_segment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etFirstRoadSegment" />
+
+    <Spinner
+        android:id="@+id/spinnerSecondRoadSegment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSecondRoadSegment" />
+
+    <EditText
+        android:id="@+id/etSecondRoadSegment"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/please_input_distance"
+        android:hint="@string/please_input_distance"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerSecondRoadSegment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerSecondRoadSegment"
+        app:layout_constraintTop_toBottomOf="@+id/tvSecondRoadSegment" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

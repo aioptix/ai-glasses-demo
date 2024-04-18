@@ -19,4 +19,19 @@
     <string name="style">Style:</string>
     <string name="notify_glasses">Notify Glasses</string>
     <string name="notification">Notification</string>
+    <string name="navigation">Navigation</string>
+    <string name="direction">Direction:</string>
+    <string name="total_journey_time_minute">Total journey time(minute)</string>
+    <string name="please_input_time_minute">Please input time</string>
+    <string name="total_distance">Total distance(meter):</string>
+    <string name="please_input_distance">Please input distance</string>
+    <string name="remaining_distance_meter">Remaining distance(meter)</string>
+    <string name="current_speed">Current speed:</string>
+    <string name="please_input_speed">Please input speed</string>
+    <string name="please_input">Please input</string>
+    <string name="remaining_distance_of_current_road_segment">Remaining distance of current road segment:</string>
+    <string name="send_command">Send Command</string>
+    <string name="first_road_segment">First Road Segment</string>
+    <string name="second_road_segment">Second Road Segment</string>
+    <string name="please_input_0_76">Please input 0~76</string>
 </resources>

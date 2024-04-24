@@ -34,4 +34,8 @@
     <string name="first_road_segment">First Road Segment</string>
     <string name="second_road_segment">Second Road Segment</string>
     <string name="please_input_0_76">Please input 0~76</string>
+    <string name="open_navigation">Open navigation</string>
+    <string name="close_navigation">Close navigation</string>
+    <string name="open_ai">Open AI record voice</string>
+    <string name="close_ai">Close AI record voice</string>
 </resources>

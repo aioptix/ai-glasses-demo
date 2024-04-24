@@ -195,5 +195,23 @@
         app:layout_constraintStart_toEndOf="@+id/spinnerSecondRoadSegment"
         app:layout_constraintTop_toBottomOf="@+id/tvSecondRoadSegment" />
 
+    <Button
+        android:id="@+id/btnOpenNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/open_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerSecondRoadSegment" />
+
+    <Button
+        android:id="@+id/btnCloseNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/close_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSecondRoadSegment" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

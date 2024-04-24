@@ -89,6 +89,27 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
             }
             startActivity(Intent(this@ControlActivity, NavActivity::class.java))
         }
+        viewBinding.btnOpenAI.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (App.instance.getBleDevice() == null) {
+                BleLogger.e("App.instance.getBleDevice() == null")
+                return@setOnClickListener
+            }
+            App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_AI_RECORD_VOICE, BleCommand.CONTROL_OPEN))
+        }
+
+        viewBinding.btnCloseAI.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (App.instance.getBleDevice() == null) {
+                BleLogger.e("App.instance.getBleDevice() == null")
+                return@setOnClickListener
+            }
+            App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_AI_RECORD_VOICE, BleCommand.CONTROL_CLOSE))
+        }
     }
 
     val spinnerItems = arrayOf("English", "German", "Japanese", "Chinese", "French", "Korean", "Spanish")

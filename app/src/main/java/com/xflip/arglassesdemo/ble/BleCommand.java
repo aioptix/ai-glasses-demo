@@ -349,8 +349,8 @@ public class BleCommand {
 
     private static byte[] shortToBytes(short a) {
         return new byte[] {
-                (byte)(a & 0xff),
-                (byte)((a >> 8) & 0xff)
+                (byte)((a >> 8) & 0xff),
+                (byte)(a & 0xff)
         };
     }
 
@@ -1016,12 +1016,15 @@ public class BleCommand {
 
     public final static byte FUNCTION_AI_QUESTION_DIALOG_SHOW = 0x03;
 
+    public final static byte FUNCTION_NAV_OPEN_OR_CLOSE = 0x04;
+
     /**
      * Control some functions of your glasses
      * @param function function
      *                 {@link BleCommand#FUNCTION_AI_RECORD_VOICE recording}
      *                 {@link BleCommand#FUNCTION_AI_LOSE_CONNECTION lost connection to AI}
      *                 {@link BleCommand#FUNCTION_AI_QUESTION_DIALOG_SHOW Whether to display the question dialog}
+     *                 {@link BleCommand#FUNCTION_NAV_OPEN_OR_CLOSE Open or Close the navigation function}
      * @param control open or close
      *                {@link BleCommand#CONTROL_OPEN Open the function}
      *                {@link BleCommand#CONTROL_CLOSE Close the function}

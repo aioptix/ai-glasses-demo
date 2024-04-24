@@ -30,6 +30,28 @@ class NavActivity : BaseActivity<NavViewModel, ActivityNavBinding>() {
             checkTheDataAndSendCommand()
         }
 
+        viewBinding.btnOpenNav.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (App.instance.getBleDevice() == null) {
+                BleLogger.e("App.instance.getBleDevice() == null")
+                return@setOnClickListener
+            }
+            App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_NAV_OPEN_OR_CLOSE, BleCommand.CONTROL_OPEN))
+        }
+
+        viewBinding.btnCloseNav.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (App.instance.getBleDevice() == null) {
+                BleLogger.e("App.instance.getBleDevice() == null")
+                return@setOnClickListener
+            }
+            App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_NAV_OPEN_OR_CLOSE, BleCommand.CONTROL_CLOSE))
+        }
+
     }
 
     private fun checkTheDataAndSendCommand() {
@@ -114,8 +136,8 @@ class NavActivity : BaseActivity<NavViewModel, ActivityNavBinding>() {
 
     }
 
-    val spinnerRoadSegment = arrayOf("Road Segment Unknown", "Road Segment Clear", "Road Segment Slow", "Road Segment Blocked", "Road Segment Seriously Blocked")
-    val roadSegmentItems = arrayOf(BleCommand.ROAD_SEGMENT_UNKNOWN, BleCommand.ROAD_SEGMENT_CLEAR, BleCommand.ROAD_SEGMENT_SLOW, BleCommand.ROAD_SEGMENT_BLOCKED, BleCommand.ROAD_SEGMENT_SERIOUSLY_BLOCKED)
+    private val spinnerRoadSegment = arrayOf("Road Segment Unknown", "Road Segment Clear", "Road Segment Slow", "Road Segment Blocked", "Road Segment Seriously Blocked")
+    private val roadSegmentItems = arrayOf(BleCommand.ROAD_SEGMENT_UNKNOWN, BleCommand.ROAD_SEGMENT_CLEAR, BleCommand.ROAD_SEGMENT_SLOW, BleCommand.ROAD_SEGMENT_BLOCKED, BleCommand.ROAD_SEGMENT_SERIOUSLY_BLOCKED)
 
     var firstRoadSegmentStatus = -1
     var secondRoadSegmentStatus = -1

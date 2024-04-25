@@ -99,7 +99,7 @@ class AiQaActivity : BaseActivity<AiQaViewModel, ActivityAiQaBinding>() {
     }
 
     private fun sendReplyToGlasses() {
-        if (viewBinding.etQuestion.text.isBlank()) {
+        if (viewBinding.etReply.text.isBlank()) {
             Toast.makeText(application, "Please input Reply!!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -107,7 +107,7 @@ class AiQaActivity : BaseActivity<AiQaViewModel, ActivityAiQaBinding>() {
             BleLogger.e("App.instance.getBleDevice() == null")
             return
         }
-        val question = viewBinding.etQuestion.text.toString()
+        val question = viewBinding.etReply.text.toString()
         for (data in BleCommand.aiReply(question)) {
             App.instance.writeData(App.instance.getBleDevice()!!, data)
         }

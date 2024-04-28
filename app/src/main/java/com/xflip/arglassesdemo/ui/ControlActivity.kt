@@ -159,9 +159,10 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
         if (!verifyCorrectPacket(data)) {
             return
         }
-        val useData = data.copyOfRange(6, data.lastIndex)
+        val useData = data.copyOfRange(6, data.size)
         if (useData[0] == (0xD9).toByte()) {
-            val name = String(useData.copyOfRange(1, 8), Charsets.UTF_8)
+            val nameByte = useData.copyOfRange(1, 9)
+            val name = String(nameByte, Charsets.UTF_8)
             val station = useData[9]
             val type = useData[10]
 
@@ -171,7 +172,7 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
 
             initSetting(currentBrightness.toInt(), currentLanguage, currentVolume.toInt())
 
-            BleLogger.d("Version Name: $name")
+            BleLogger.d("Version Name: $name " + getHexString(nameByte))
         }
     }
 
@@ -189,11 +190,12 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
         val payloadLength = data[3]
         val crc16First = data[4]
         val crc16Last = data[5]
-        val crc16Data = data.copyOfRange(6, data.lastIndex)
-        if (crc16Data.size != (payloadLength+1)) {
+        val crc16Data = data.copyOfRange(6, data.size)
+        if (crc16Data.size != (payloadLength + 1)) {
             BleLogger.e("crc16 data not right!! crc16 data size is ${crc16Data.size}, payload length is ${payloadLength.toInt()}")
             return false
         }
+        BleLogger.d(getHexString(crc16Data))
         val crc16 = BleCommand.CRC16_IBM(crc16Data)
         val willCheckCrc16First = ((crc16 shr 8) and 0xFF).toByte()
         val willCheckCrc16Last =  (crc16 and 0xFF).toByte()
@@ -203,6 +205,14 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
             return false
         }
         return true
+    }
+
+    private fun getHexString(array: ByteArray): String {
+        var hex = "";
+        for (data in array) {
+            hex = hex + Integer.toHexString(data.toInt() and 0xFF) + " "
+        }
+        return hex
     }
 
     private fun getHexString(data: Byte): String {

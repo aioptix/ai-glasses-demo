@@ -6,6 +6,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import com.bhm.ble.utils.BleLogger
 import com.xflip.arglassesdemo.App
 import com.xflip.arglassesdemo.base.BaseActivity
@@ -62,6 +63,10 @@ class ControlActivity() : BaseActivity<ControlViewModel, ActivityControlBinding>
         })
         viewBinding.btnSubmitTurnOffTime.setOnClickListener {
             if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (viewBinding.editScreenTurnOffTime.text.isBlank()) {
+                Toast.makeText(application, "Please input time", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val time = viewBinding.editScreenTurnOffTime.text.toString()

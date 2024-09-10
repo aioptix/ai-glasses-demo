@@ -305,6 +305,441 @@ public class BleCommand {
     }
 
     /**
+     * Set navigation information
+     * @param directionIcon Navigation icon 0x00~0x4c
+     * @param totalTime Total time （minutes）
+     * @param totalDistance  total distance
+     * @param remainDistance remaining distance
+     * @param currentSpeed  current speed
+     * @param rdOnCurrentRoadSegment remaining distance on current road segment
+     * @param directionInfo  direction info
+     * @return  navigation information command
+     */
+    public static byte[] updateNavigation(byte directionIcon, short totalTime,
+                                          int totalDistance, int remainDistance,
+                                          byte currentSpeed, int rdOnCurrentRoadSegment,
+                                          byte[] directionInfo) {
+        byte[] needCrc16Command = new byte[63];
+        needCrc16Command[0] = (byte) 0xD6;
+        needCrc16Command[1] = 0x00;
+        needCrc16Command[2] = directionIcon;
+        byte[] timeArray = shortToBytes(totalTime);
+        needCrc16Command[3] = timeArray[0];
+        needCrc16Command[4] = timeArray[1];
+        byte[] totalDistanceArray = intToByteArray(totalDistance);
+        needCrc16Command[5] = totalDistanceArray[0];
+        needCrc16Command[6] = totalDistanceArray[1];
+        needCrc16Command[7] = totalDistanceArray[2];
+        needCrc16Command[8] = totalDistanceArray[3];
+        byte[] remainDistanceArray = intToByteArray(remainDistance);
+        needCrc16Command[9] = remainDistanceArray[0];
+        needCrc16Command[10] = remainDistanceArray[1];
+        needCrc16Command[11] = remainDistanceArray[2];
+        needCrc16Command[12] = remainDistanceArray[3];
+        needCrc16Command[13] = currentSpeed;
+        byte[] rdOnCurrentRoadSegmentArray = intToByteArray(rdOnCurrentRoadSegment);
+        needCrc16Command[14] = rdOnCurrentRoadSegmentArray[0];
+        needCrc16Command[15] = rdOnCurrentRoadSegmentArray[1];
+        needCrc16Command[16] = rdOnCurrentRoadSegmentArray[2];
+        needCrc16Command[17] = rdOnCurrentRoadSegmentArray[3];
+        System.arraycopy(directionInfo, 0, needCrc16Command, 18, 45);
+
+        return getFinalCommand(getCurrentSerialNumber(), needCrc16Command);
+    }
+
+    private static byte[] shortToBytes(short a) {
+        return new byte[] {
+                (byte)((a >> 8) & 0xff),
+                (byte)(a & 0xff)
+        };
+    }
+
+    /**
+     * The road is unknown
+     */
+    public final static byte ROAD_SEGMENT_UNKNOWN = 0x00;
+    /**
+     * The road is clear
+     */
+    public final static byte ROAD_SEGMENT_CLEAR = 0x01;
+    /**
+     * The slow road
+     */
+    public final static byte ROAD_SEGMENT_SLOW = 0x02;
+    /**
+     * The road blocked
+     */
+    public final static byte ROAD_SEGMENT_BLOCKED = 0x03;
+    /**
+     * The road is seriously blocked
+     */
+    public final static byte ROAD_SEGMENT_SERIOUSLY_BLOCKED = 0x04;
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment first road segment
+     * @param firstDistance    first road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @return  direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                thirdRoadSegment, thirdDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @param fourthRoadSegment  fourth road segment
+     * @param fourthDistance     fourth road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance,
+                                          byte fourthRoadSegment, int fourthDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                thirdRoadSegment, thirdDistance,
+                fourthRoadSegment, fourthDistance,
+                (byte)0x00, 0);
+    }
+
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @param fourthRoadSegment  fourth road segment
+     * @param fourthDistance     fourth road distance
+     * @param fifthRoadSegment   fifth road segment
+     * @param fifthDistance      fifth road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance,
+                                          byte fourthRoadSegment, int fourthDistance,
+                                          byte fifthRoadSegment, int fifthDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                thirdRoadSegment, thirdDistance,
+                fourthRoadSegment, fourthDistance,
+                fifthRoadSegment, fifthDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @param fourthRoadSegment  fourth road segment
+     * @param fourthDistance     fourth road distance
+     * @param fifthRoadSegment   fifth road segment
+     * @param fifthDistance      fifth road distance
+     * @param sixthRoadSegment   sixth road segment
+     * @param sixthDistance      sixth road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance,
+                                          byte fourthRoadSegment, int fourthDistance,
+                                          byte fifthRoadSegment, int fifthDistance,
+                                          byte sixthRoadSegment, int sixthDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                thirdRoadSegment, thirdDistance,
+                fourthRoadSegment, fourthDistance,
+                fifthRoadSegment, fifthDistance,
+                sixthRoadSegment, sixthDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @param fourthRoadSegment  fourth road segment
+     * @param fourthDistance     fourth road distance
+     * @param fifthRoadSegment   fifth road segment
+     * @param fifthDistance      fifth road distance
+     * @param sixthRoadSegment   sixth road segment
+     * @param sixthDistance      sixth road distance
+     * @param seventhRoadSegment seventh road segment
+     * @param seventhDistance    seventh road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance,
+                                          byte fourthRoadSegment, int fourthDistance,
+                                          byte fifthRoadSegment, int fifthDistance,
+                                          byte sixthRoadSegment, int sixthDistance,
+                                          byte seventhRoadSegment, int seventhDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                thirdRoadSegment, thirdDistance,
+                fourthRoadSegment, fourthDistance,
+                fifthRoadSegment, fifthDistance,
+                sixthRoadSegment, sixthDistance,
+                seventhRoadSegment, seventhDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @param fourthRoadSegment  fourth road segment
+     * @param fourthDistance     fourth road distance
+     * @param fifthRoadSegment   fifth road segment
+     * @param fifthDistance      fifth road distance
+     * @param sixthRoadSegment   sixth road segment
+     * @param sixthDistance      sixth road distance
+     * @param seventhRoadSegment seventh road segment
+     * @param seventhDistance    seventh road distance
+     * @param eighthRoadSegment  eighth road segment
+     * @param eighthDistance     eighth road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance,
+                                          byte fourthRoadSegment, int fourthDistance,
+                                          byte fifthRoadSegment, int fifthDistance,
+                                          byte sixthRoadSegment, int sixthDistance,
+                                          byte seventhRoadSegment, int seventhDistance,
+                                          byte eighthRoadSegment, int eighthDistance) {
+        return setDirectionInfo(firstRoadSegment, firstDistance,
+                secondRoadSegment, secondDistance,
+                thirdRoadSegment, thirdDistance,
+                fourthRoadSegment, fourthDistance,
+                fifthRoadSegment, fifthDistance,
+                sixthRoadSegment, sixthDistance,
+                seventhRoadSegment, seventhDistance,
+                eighthRoadSegment, eighthDistance,
+                (byte)0x00, 0);
+    }
+
+    /**
+     * Set navigation information
+     * road segment :
+     * {@link BleCommand#ROAD_SEGMENT_UNKNOWN}
+     * {@link BleCommand#ROAD_SEGMENT_CLEAR}
+     * {@link BleCommand#ROAD_SEGMENT_SLOW}
+     * {@link BleCommand#ROAD_SEGMENT_BLOCKED}
+     * {@link BleCommand#ROAD_SEGMENT_SERIOUSLY_BLOCKED}
+     * @param firstRoadSegment   first road segment
+     * @param firstDistance      first road distance
+     * @param secondRoadSegment  second road segment
+     * @param secondDistance     second road distance
+     * @param thirdRoadSegment   third road segment
+     * @param thirdDistance      third road distance
+     * @param fourthRoadSegment  fourth road segment
+     * @param fourthDistance     fourth road distance
+     * @param fifthRoadSegment   fifth road segment
+     * @param fifthDistance      fifth road distance
+     * @param sixthRoadSegment   sixth road segment
+     * @param sixthDistance      sixth road distance
+     * @param seventhRoadSegment seventh road segment
+     * @param seventhDistance    seventh road distance
+     * @param eighthRoadSegment  eighth road segment
+     * @param eighthDistance     eighth road distance
+     * @param ninthRoadSegment   ninth road segment
+     * @param ninthDistance      ninth road distance
+     * @return direction info
+     */
+    public static byte[] setDirectionInfo(byte firstRoadSegment, int firstDistance,
+                                          byte secondRoadSegment, int secondDistance,
+                                          byte thirdRoadSegment, int thirdDistance,
+                                          byte fourthRoadSegment, int fourthDistance,
+                                          byte fifthRoadSegment, int fifthDistance,
+                                          byte sixthRoadSegment, int sixthDistance,
+                                          byte seventhRoadSegment, int seventhDistance,
+                                          byte eighthRoadSegment, int eighthDistance,
+                                          byte ninthRoadSegment, int ninthDistance) {
+        byte[] directionInfo = new byte[45];
+        directionInfo[0] = firstRoadSegment;
+        byte[] firstArray = intToByteArray(firstDistance);
+        directionInfo[1] = firstArray[0];
+        directionInfo[2] = firstArray[1];
+        directionInfo[3] = firstArray[2];
+        directionInfo[4] = firstArray[3];
+
+        directionInfo[5] = secondRoadSegment;
+        byte[] secondArray = intToByteArray(secondDistance);
+        directionInfo[6] = secondArray[0];
+        directionInfo[7] = secondArray[1];
+        directionInfo[8] = secondArray[2];
+        directionInfo[9] = secondArray[3];
+
+
+        directionInfo[10] = thirdRoadSegment;
+        byte[] thirdArray = intToByteArray(thirdDistance);
+        directionInfo[11] = thirdArray[0];
+        directionInfo[12] = thirdArray[1];
+        directionInfo[13] = thirdArray[2];
+        directionInfo[14] = thirdArray[3];
+
+        directionInfo[15] = fourthRoadSegment;
+        byte[] fourthArray = intToByteArray(fourthDistance);
+        directionInfo[16] = fourthArray[0];
+        directionInfo[17] = fourthArray[1];
+        directionInfo[18] = fourthArray[2];
+        directionInfo[19] = fourthArray[3];
+
+        directionInfo[20] = fifthRoadSegment;
+        byte[] fifthArray = intToByteArray(fifthDistance);
+        directionInfo[21] = fifthArray[0];
+        directionInfo[22] = fifthArray[1];
+        directionInfo[23] = fifthArray[2];
+        directionInfo[24] = fifthArray[3];
+
+        directionInfo[25] = sixthRoadSegment;
+        byte[] sixthArray = intToByteArray(sixthDistance);
+        directionInfo[26] = sixthArray[0];
+        directionInfo[27] = sixthArray[1];
+        directionInfo[28] = sixthArray[2];
+        directionInfo[29] = sixthArray[3];
+
+        directionInfo[30] = seventhRoadSegment;
+        byte[] seventhArray = intToByteArray(seventhDistance);
+        directionInfo[31] = seventhArray[0];
+        directionInfo[32] = seventhArray[1];
+        directionInfo[33] = seventhArray[2];
+        directionInfo[34] = seventhArray[3];
+
+        directionInfo[35] = eighthRoadSegment;
+        byte[] eighthArray = intToByteArray(eighthDistance);
+        directionInfo[36] = eighthArray[0];
+        directionInfo[37] = eighthArray[1];
+        directionInfo[38] = eighthArray[2];
+        directionInfo[39] = eighthArray[3];
+
+        directionInfo[40] = ninthRoadSegment;
+        byte[] ninthArray = intToByteArray(ninthDistance);
+        directionInfo[41] = ninthArray[0];
+        directionInfo[42] = ninthArray[1];
+        directionInfo[43] = ninthArray[2];
+        directionInfo[44] = ninthArray[3];
+
+        return directionInfo;
+
+    }
+
+    public static byte[] intToByteArray(int a) {
+        return new byte[] {
+                (byte) ((a >> 24) & 0xFF),
+                (byte) ((a >> 16) & 0xFF),
+                (byte) ((a >> 8) & 0xFF),
+                (byte) (a & 0xFF)
+        };
+    }
+
+    /**
      * Time Setting (24 hour clock)
      * @param year   Year
      * @param month  Month
@@ -581,12 +1016,15 @@ public class BleCommand {
 
     public final static byte FUNCTION_AI_QUESTION_DIALOG_SHOW = 0x03;
 
+    public final static byte FUNCTION_NAV_OPEN_OR_CLOSE = 0x04;
+
     /**
      * Control some functions of your glasses
      * @param function function
      *                 {@link BleCommand#FUNCTION_AI_RECORD_VOICE recording}
      *                 {@link BleCommand#FUNCTION_AI_LOSE_CONNECTION lost connection to AI}
      *                 {@link BleCommand#FUNCTION_AI_QUESTION_DIALOG_SHOW Whether to display the question dialog}
+     *                 {@link BleCommand#FUNCTION_NAV_OPEN_OR_CLOSE Open or Close the navigation function}
      * @param control open or close
      *                {@link BleCommand#CONTROL_OPEN Open the function}
      *                {@link BleCommand#CONTROL_CLOSE Close the function}

@@ -43,6 +43,27 @@ class AiQaActivity : BaseActivity<AiQaViewModel, ActivityAiQaBinding>() {
             App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_AI_QUESTION_DIALOG_SHOW,
                 if (isChecked) BleCommand.CONTROL_OPEN else BleCommand.CONTROL_CLOSE))
         }
+        viewBinding.btnOpenAI.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (App.instance.getBleDevice() == null) {
+                BleLogger.e("App.instance.getBleDevice() == null")
+                return@setOnClickListener
+            }
+            App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_AI_RECORD_VOICE, BleCommand.CONTROL_OPEN))
+        }
+
+        viewBinding.btnCloseAI.setOnClickListener {
+            if (ViewUtil.isInvalidClick(it)) {
+                return@setOnClickListener
+            }
+            if (App.instance.getBleDevice() == null) {
+                BleLogger.e("App.instance.getBleDevice() == null")
+                return@setOnClickListener
+            }
+            App.instance.writeData(App.instance.getBleDevice()!!, BleCommand.glassesControl(BleCommand.FUNCTION_AI_RECORD_VOICE, BleCommand.CONTROL_CLOSE))
+        }
     }
 
     val spinnerItems = arrayOf(
@@ -99,7 +120,7 @@ class AiQaActivity : BaseActivity<AiQaViewModel, ActivityAiQaBinding>() {
     }
 
     private fun sendReplyToGlasses() {
-        if (viewBinding.etQuestion.text.isBlank()) {
+        if (viewBinding.etReply.text.isBlank()) {
             Toast.makeText(application, "Please input Reply!!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -107,7 +128,7 @@ class AiQaActivity : BaseActivity<AiQaViewModel, ActivityAiQaBinding>() {
             BleLogger.e("App.instance.getBleDevice() == null")
             return
         }
-        val question = viewBinding.etQuestion.text.toString()
+        val question = viewBinding.etReply.text.toString()
         for (data in BleCommand.aiReply(question)) {
             App.instance.writeData(App.instance.getBleDevice()!!, data)
         }

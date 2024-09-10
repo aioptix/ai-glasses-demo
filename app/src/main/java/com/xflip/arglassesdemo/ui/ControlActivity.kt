@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
-import com.bhm.ble.utils.BleLogger
+import com.bhm.ble.log.BleLogger
 import com.xflip.arglassesdemo.App
 import com.xflip.arglassesdemo.base.BaseActivity
 import com.xflip.arglassesdemo.ble.BleCommand

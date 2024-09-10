@@ -10,7 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bhm.ble.utils.BleLogger
+import com.bhm.ble.log.BleLogger
 import com.xflip.arglassesdemo.App
 import com.xflip.arglassesdemo.R
 import com.xflip.arglassesdemo.base.BaseActivity

@@ -9,7 +9,7 @@ import com.bhm.ble.callback.BleScanCallback
 import com.bhm.ble.data.BleDescriptorGetType
 import com.bhm.ble.data.Constants
 import com.bhm.ble.device.BleDevice
-import com.bhm.ble.utils.BleLogger
+import com.bhm.ble.log.BleLogger
 import com.bhm.ble.utils.BleUtil
 import com.xflip.arglassesdemo.ble.BleCommand
 import com.xflip.arglassesdemo.entity.MessageEvent
